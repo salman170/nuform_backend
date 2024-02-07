@@ -5,6 +5,12 @@ const {
   deleteContactForm,
   updateContactUs,
 } = require("../controllers/contactUsController");
+const {
+  createShippingAdd,
+  getShippingAdd,
+  updateShippingAdd,
+  deleteShippingAdd
+} = require("../controllers/shippingController")
 const router = express.Router();
 
 //====================================================================
@@ -36,6 +42,21 @@ router.put(
   //   authentication,
   //   authorization3,
   updateContactUs
+);
+//======================shippingAddress================================
+router.post("/createaddress", createShippingAdd);
+router.get("/getaddress", getShippingAdd); //by admin
+router.delete(
+  "/deleteaddress/:addressId/:userID",
+  //   authentication,
+  //   authorization3,
+  deleteShippingAdd
+); // by admin
+router.put(
+  "/updateaddress/:addressId/:userID",
+  //   authentication,
+  //   authorization3,
+  updateShippingAdd
 );
 
 module.exports = router;
