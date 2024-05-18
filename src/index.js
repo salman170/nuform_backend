@@ -1,30 +1,20 @@
-const express = require("express");
-const route = require("./routes/route");
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import route from "./routes/route.js";
+import mongoose from "mongoose";
+import cors from "cors";
+
 const app = express();
-const mongoose = require("mongoose");
-require("dotenv").config();
-
 app.use(express.json());
-var cors = require("cors");
 app.use(cors());
-
-mongoose
-  .connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-  })
-  .then(() => console.log("MongoDb is connected"))
-  .catch((err) => console.log(err));
-
 app.use("/", route);
 
+mongoose
+  .connect(process.env.MONGODB_URL)
+  .then(() => console.log("Server started"))
+  .catch((e) => console.log("Got error while starting server ", e));
+
 app.listen(process.env.PORT || 8000, function () {
-  console.log("Express app running on port " + (process.env.PORT || 8000));
-});
-
-//version controller new Date()
-
-app.use(function (req, res) {
-  var err = new Error("Not Found");
-  err.status = 404;
-  return res.send({ status: 404, msg: "path not found" });
+  console.log("Running on " + (process.env.PORT || 8000));
 });
