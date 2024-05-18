@@ -9,7 +9,10 @@ const createOrder = async (req, res) => {
   try {
     let data = req.body;
 
-    if (!data) return res.status(400).send({ status: false, message: "order data is missing" });
+    if (!data)
+      return res
+        .status(400)
+        .send({ status: false, message: "order data is missing" });
 
     let saveData = await OrderModel.create(data);
     res.status(201).send({ status: true, data: saveData });
@@ -23,8 +26,11 @@ const placeOrder = async (req, res) => {
   try {
     let data = req.body;
 
-    if(!data) return res.status(400).send({ status: false, message: "order data is missing" });
-   
+    if (!data)
+      return res
+        .status(400)
+        .send({ status: false, message: "order data is missing" });
+
     let saveData = await OrderModel.create(data);
     let orderId = saveData._id;
 
@@ -34,16 +40,15 @@ const placeOrder = async (req, res) => {
       key_secret: process.env.RAZORPAY_SECRET_KEY,
     });
 
-
     const paymentData = {
-      amount: saveData.totalPrice * 100, 
+      amount: saveData.totalPrice * 100,
       currency: "INR",
       receipt: orderId,
     };
 
     razorpayInstance.orders.create(paymentData, async (err, order) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         return res.status(500).send({ status: false, message: err });
       }
       let paymentData = {
@@ -73,16 +78,11 @@ const placeOrder = async (req, res) => {
       saveData.paymentDetails = order;
       await saveData.save();
 
-      return res.status(200).send({ status: true});
+      return res.status(200).send({ status: true });
     });
-
-
-
 
     //res.status(201).send({ status: true, data: saveData });
     console.log("saveData", saveData);
-
-
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
@@ -93,12 +93,18 @@ const getOrderData = async (req, res) => {
   try {
     let filter = { isDeleted: false };
     const orderId = req.params.orderId;
-    if(!orderId)  return res.status(400).send({ status: false, message: "No order id passed" });
-    filter._id = orderId
+    if (!orderId)
+      return res
+        .status(400)
+        .send({ status: false, message: "No order id passed" });
+    filter._id = orderId;
 
-    if(!req?.query?.userId)  return res.status(400).send({ status: false, message: "user id is missing" });
-    filter.user = userId
-    
+    if (!req?.query?.userId)
+      return res
+        .status(400)
+        .send({ status: false, message: "user id is missing" });
+    filter.user = userId;
+
     const orderData = await OrderModel.find(filter).sort({ createdAt: -1 });
     if (orderData.length === 0)
       return res.status(400).send({ status: false, message: "No order found" });

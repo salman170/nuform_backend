@@ -1,4 +1,4 @@
-import ProductModel from "../models/ProductModel.js";
+import ProductModel from "../models/productModel.js";
 
 const addProductData = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
