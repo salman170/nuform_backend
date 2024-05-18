@@ -78,10 +78,16 @@ const placeOrder = async (req, res) => {
       saveData.paymentDetails = order;
       await saveData.save();
 
-      return res.status(200).send({ status: true });
+      return res
+        .status(200)
+        .send({
+          transactionId: saveData.transactionId,
+          total: saveData.paymentDetails.amount,
+          status: true,
+        });
     });
 
-    //res.status(201).send({ status: true, data: saveData });
+    // res.status(201).send({ status: true, data: saveData });
     console.log("saveData", saveData);
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
