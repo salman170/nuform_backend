@@ -33,6 +33,13 @@ import {
   deleteOrderData,
 } from "../controllers/orderController.js";
 
+import {
+  addEditProductReview,
+  listProductReview
+}from "../controllers/productReviewController.js";
+
+import { authenticate, fetchRates } from "../shiprocket/authenticate.js";
+
 router.get("/test-me", function (req, res) {
   res.send("Hello World");
 });
@@ -65,6 +72,14 @@ router.get("/getOrderData/:orderId/", authentication, getOrderData);
 router.get("/listOrderData", authentication, listOrderData);
 router.put("/updateOrderData/:orderId", authentication, authorization, updateOrderData);
 router.delete("/deleteOrderData/:orderId", authentication, authorization, deleteOrderData);
+
+
+router.post("/addEditProductReview", addEditProductReview)
+router.post("/listProductReview", listProductReview)
+
+
+//shiprocket routes
+router.post("/fetchRates", authenticate, fetchRates);
 
 
 router.all('/*', async function (req, res) {
