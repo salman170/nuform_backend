@@ -30,7 +30,7 @@ const login = async (req, res) => {
       expiresIn: "24h",
     });
 
-    return res.status(200).send({ status: true, message: "Logged in successfully", data: token });
+    return res.status(200).send({ status: true, message: "Logged in successfully", data: token, userID: loggedInUser._id,userName: loggedInUser.name});
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }

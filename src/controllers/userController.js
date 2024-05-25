@@ -1,5 +1,6 @@
 import UserModel from "../models/userModel.js";
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
 import { v5 as uuidv5 } from "uuid";
 
 dotenv.config();
@@ -12,6 +13,8 @@ const addUserData = async (req, res) => {
     if (!data) return res.status(400).send({ status: false, message: "User data is missing" });
     if (!data?.phone) return res.status(400).send({ status: false, message: "contact is missing" });
 
+    const checkUser = await UserModel.findOne({ email : data.email });
+    if(checkUser) return res.status(400).send({ status: false, message: "User already exists" });
     if(!data?.password) data.password = data.phone;
 
     const encryptPass = await bcrypt.hash(data.password, 10)
