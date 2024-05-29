@@ -31,6 +31,7 @@ import {
   listOrderData,
   updateOrderData,
   deleteOrderData,
+  updateSuccessOrderData,
 } from "../controllers/orderController.js";
 
 import {
@@ -38,20 +39,25 @@ import {
   listProductReview
 }from "../controllers/productReviewController.js";
 
-import { authenticate, fetchRates } from "../shiprocket/authenticate.js";
+import { 
+  shiprocketAuthenticate, 
+  fetchRates, 
+  optimizedRates,
+  createForwardShipmentShiprocketOrder 
+} from "../shiprockets/shiprocket.js";
 
 router.get("/test-me", function (req, res) {
   res.send("Hello World");
 });
 
-router.post('/login', login)
+router.post('/login', login) // tested
 router.post('/resetPassword', forgotPassword, resetPassword)
 
-router.post("/addUserData", addUserData)
-router.get("/getUserData/:userId", authentication, getUserData)
-router.get("/listUserData", authentication, listUserData)
-router.put("/updateUserData/:userId", authentication, authorization, updateUserData)
-router.put("/deleteUserData/:userId", authentication, authorization, deleteUserData)
+router.post("/addUserData", addUserData) // tested
+router.get("/getUserData/:userId", authentication, getUserData) // tested
+router.get("/listUserData", authentication, listUserData) // tested
+router.put("/updateUserData/:userId", authentication, authorization, updateUserData) // tested
+router.put("/deleteUserData/:userId", authentication, authorization, deleteUserData) // tested
 
 router.post("/addAdminData", addAdminData)
 router.get("/getAdminData/:adminId", authentication, getAdminData)
@@ -67,11 +73,12 @@ router.put("/updateProductData/:productId", authentication, authorization, updat
 router.put("/deleteProductData/:productId", authentication, authorization, deleteProductData);
 
 router.post("/createOrder", authentication, createOrder);
-router.post("/placeOrder", placeOrder);
+router.post("/placeOrder", placeOrder); // alreday tested before
 router.get("/getOrderData/:orderId/", authentication, getOrderData);
 router.get("/listOrderData", authentication, listOrderData);
 router.put("/updateOrderData/:orderId", authentication, authorization, updateOrderData);
 router.delete("/deleteOrderData/:orderId", authentication, authorization, deleteOrderData);
+router.put("/updateSuccessOrderData/:orderId/:paymentId", updateSuccessOrderData);
 
 
 router.post("/addEditProductReview", addEditProductReview)
@@ -79,7 +86,9 @@ router.post("/listProductReview", listProductReview)
 
 
 //shiprocket routes
-router.post("/fetchRates", authenticate, fetchRates);
+router.post("/fetchRates", shiprocketAuthenticate, fetchRates); //tested
+router.post("/optimizedRates", optimizedRates); //tested 
+router.post("/createShipment", createForwardShipmentShiprocketOrder);
 
 
 router.all('/*', async function (req, res) {

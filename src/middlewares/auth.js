@@ -7,11 +7,13 @@ const authentication = async (req, res, next) => {
 
         let authUser;
         if(req?.query?.isAdmin){
-            if(!req?.query?.adminId)  return res.status(400).send({ status: false, msg: "Admin Id is not passed" });
-            authUser = await AdminModel.findById(req?.query?.adminId)
+            let adminId = req?.query?.adminId || req?.params?.adminId
+            if(!adminId)  return res.status(400).send({ status: false, msg: "Admin Id is not passed" });
+            authUser = await AdminModel.findById(adminId)
         }else{
-            if(!req?.query?.userId)  return res.status(400).send({ status: false, msg: "User Id is not passed" });
-            authUser = await UserModel.findById(req?.query?.userId)
+            let userId = req?.query?.userId || req?.params?.userId
+            if(!userId)  return res.status(400).send({ status: false, msg: "User Id is not passed" });
+            authUser = await UserModel.findById(userId)
         }
 
         if(!authUser) return res.status(400).send({ status: false, msg: "User not found" });
@@ -35,7 +37,7 @@ const authentication = async (req, res, next) => {
 const authorization = async (req, res, next) => {
     try {
         let decodedUserId = req.decodedUserId
-        let currentId = req.query.userId || req.query.adminId
+        let currentId = req.query.userId || req.query.adminId || req.params.userId || req.params.adminId
         if(!currentId)  return res.status(400).send({ status: false, msg: "Id is not passed" });
         if(decodedUserId !== currentId)  return res.status(403).send({ status: false, msg: "Unauthorized" });
         return next()

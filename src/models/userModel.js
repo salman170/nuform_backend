@@ -77,14 +77,20 @@ const userSchema = {
     },
   ],
   loginKey: {
-    type: String
+    type: String,
   },
   isDeleted: {
     type: Boolean,
     default: false,
   },
   deletedAt: {
-    type: Date
+    type: Date,
+  },
+  date: {
+    type: String,
+  },
+  time: {
+    type: String,
   },
 };
 

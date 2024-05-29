@@ -25,6 +25,7 @@ const placeOrder = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     let data = req.body;
+    console.log("data", data);
 
     if (!data)
       return res
@@ -55,7 +56,7 @@ const placeOrder = async (req, res) => {
         user: saveData.user,
         order: orderId,
         paymentMethod: "Razorpay",
-        paymentResult: "SUCCESS",
+        paymentResult: "PENDING",
         razorpayPaymentId: order.id,
         razorpayReceipt: order.receipt,
         amount: order.amount / 100,
@@ -69,7 +70,7 @@ const placeOrder = async (req, res) => {
       saveData.paymentId = savePaymentData._id;
       saveData.isPaid = true;
       saveData.paidAt = new Date();
-      saveData.paymentResult = "SUCCESS";
+      saveData.paymentResult = "PENDING";
       saveData.paymentMethod = "Razorpay";
       saveData.transactionId = order.id;
       saveData.paymentReceipt = order.receipt;
@@ -78,13 +79,13 @@ const placeOrder = async (req, res) => {
       saveData.paymentDetails = order;
       await saveData.save();
 
-      return res
-        .status(200)
-        .send({
-          transactionId: saveData.transactionId,
-          total: saveData.paymentDetails.amount,
-          status: true,
-        });
+      return res.status(200).send({
+        transactionId: saveData.transactionId,
+        total: saveData.paymentDetails.amount,
+        orderId: orderId,
+        paymentId: savePaymentData._id,
+        status: true,
+      });
     });
 
     // res.status(201).send({ status: true, data: saveData });
@@ -166,6 +167,39 @@ const updateOrderData = async (req, res) => {
   }
 };
 
+const updateSuccessOrderData = async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  try {
+    const orderId = req.params.orderId;
+    const paymentId = req.params.orderId;
+
+    // const updatePayment = await paymentModel.findByIdAndUpdate(
+    //   paymentId,
+    //   { paymentResult: "SUCCESS" },
+    //   { new: true }
+    // );
+    // if (!updatePayment) {
+    //   return res
+    //     .status(404)
+    //     .send({ status: false, message: "Payment details not found" });
+    // }
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      orderId,
+      { paymentResult: "SUCCESS" },
+      { new: true }
+    );
+    if (!updatedOrder) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Order not found" });
+    }
+
+    return res.status(200).send({ status: true, data: updatedOrder });
+  } catch (error) {
+    return res.status(500).send({ status: false, message: error.message });
+  }
+};
+
 const deleteOrderData = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
@@ -195,4 +229,5 @@ export {
   listOrderData,
   updateOrderData,
   deleteOrderData,
+  updateSuccessOrderData,
 };
