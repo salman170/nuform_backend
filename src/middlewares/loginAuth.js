@@ -19,6 +19,7 @@ const login = async (req, res) => {
       loggedInUser = await AdminModel.findOne({ email: email });
     } else {
       loggedInUser = await UserModel.findOne({ email: email });
+      console.log("loggedInUser", loggedInUser)
     }
     if (!loggedInUser) return res.status(400).send({ status: false, message: "Please provide correct email" });
 
@@ -30,7 +31,7 @@ const login = async (req, res) => {
       expiresIn: "24h",
     });
 
-    return res.status(200).send({ status: true, message: "Logged in successfully", data: token });
+    return res.status(200).send({ status: true, message: "Logged in successfully", data: token, userID: loggedInUser._id, userType: req.query.isAdmin ? "admin" : "user", userName: loggedInUser.name});
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }

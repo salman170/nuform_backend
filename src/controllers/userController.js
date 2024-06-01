@@ -10,14 +10,19 @@ const addUserData = async (req, res) => {
   try {
     let data = req.body;
 
-    if (!data) return res.status(400).send({ status: false, message: "User data is missing" });
-    if (!data?.phone) return res.status(400).send({ status: false, message: "contact is missing" });
+    if (!data)
+      return res
+        .status(400)
+        .send({ status: false, message: "User data is missing" });
+    if (!data?.phone)
+      return res
+        .status(400)
+        .send({ status: false, message: "contact is missing" });
 
-    if(!data?.password) data.password = data.phone;
+    if (!data?.password) data.password = data.phone;
 
-    const encryptPass = await bcrypt.hash(data.password, 10)
-    data.password = encryptPass
-
+    const encryptPass = await bcrypt.hash(data.password, 10);
+    data.password = encryptPass;
 
     const namespace = process.env.NAMESPACE; // random string
     const uniqueIdentifier = data?.phone;
@@ -36,12 +41,17 @@ const getUserData = async (req, res) => {
   try {
     let filter = { isDeleted: false };
     const userId = req.params.userId;
-    if(!userId) return res.status(400).send({ status: false, message: "No user id is passed" });
-    filter._id = userId
-    const userData = await UserModel.find(filter).sort({ createdAt: -1 });
-    if (userData.length === 0) return res.status(400).send({ status: false, message: "No user found" });
-    return res.status(200).send({status: true,data: userData});
-
+    if (!userId)
+      return res
+        .status(400)
+        .send({ status: false, message: "No user id is passed" });
+    filter._id = userId;
+    const userData = await UserModel.findOne(filter);
+    // const userData = await UserModel.find(filter).sort({ createdAt: -1 });
+    // if (userData.length === 0) return res.status(400).send({ status: false, message: "No user found" });
+    if (!userData)
+      return res.status(400).send({ status: false, message: "No user found" });
+    return res.status(200).send({ status: true, data: userData });
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
@@ -135,4 +145,10 @@ const deleteUserData = async (req, res) => {
   }
 };
 
-export { addUserData, getUserData, listUserData, updateUserData, deleteUserData };
+export {
+  addUserData,
+  getUserData,
+  listUserData,
+  updateUserData,
+  deleteUserData,
+};

@@ -79,6 +79,26 @@ const userSchema = {
   loginKey: {
     type: String,
   },
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerificationToken: {
+    type: String,
+  },
+  emailVerificationTokenExpires: {
+    type: Date,
+  },
+  passwordResetToken: {
+    type: String,
+  },
+  passwordResetTokenExpires: {
+    type: Date,
+  },
+  emailMe: {
+    type: Boolean,
+    default: true,
+  },
   isDeleted: {
     type: Boolean,
     default: false,
