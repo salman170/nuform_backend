@@ -43,7 +43,8 @@ import {
   shiprocketAuthenticate, 
   fetchRates, 
   optimizedRates,
-  createForwardShipmentShiprocketOrder 
+  createForwardShipmentShiprocketOrder ,
+  trackShiprocketOrder
 } from "../shiprockets/shiprocket.js";
 
 router.get("/test-me", function (req, res) {
@@ -89,6 +90,7 @@ router.post("/listProductReview", listProductReview)
 router.post("/fetchRates", shiprocketAuthenticate, fetchRates); //tested
 router.post("/optimizedRates", optimizedRates); //tested 
 router.post("/createShipment", createForwardShipmentShiprocketOrder);
+router.get("/trackShipment/:awb", trackShiprocketOrder);
 
 
 router.all('/*', async function (req, res) {

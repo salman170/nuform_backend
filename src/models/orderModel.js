@@ -4,13 +4,22 @@ const orderSchema = new mongoose.Schema(
   {
     products: [
       {
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
+        sku: {
+          type: String,
+          required: true,
         },
-        quantity: {
+        units: {
           type: Number,
           min: 1,
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        selling_price: {
+          type: Number,
+          required: true,
         },
       },
     ],
@@ -94,6 +103,9 @@ const orderSchema = new mongoose.Schema(
     awb: {
       type: String,
       trim: true,
+    },
+    shipmentData : {
+      type: Object,
     },
     transactionId: {
       type: String,
