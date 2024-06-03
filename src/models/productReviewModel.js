@@ -8,12 +8,16 @@ const productReviewSchema = new mongoose.Schema({
     },
     userPhone: {
         type: String,
-        required: true
     },
     userEmail: {
         type: String,
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
+    
     isDeleted: {
         type: Boolean,
         default: false
@@ -35,7 +39,6 @@ const productReviewSchema = new mongoose.Schema({
     },
     comment: {
         type: String,
-        required: true,
         trim: true,
     },
 }, { timestamps: true });

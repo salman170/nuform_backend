@@ -46,7 +46,7 @@ const getUserData = async (req, res) => {
         .status(400)
         .send({ status: false, message: "No user id is passed" });
     filter._id = userId;
-    const userData = await UserModel.findOne(filter);
+    const userData = await UserModel.findOne(filter)
     // const userData = await UserModel.find(filter).sort({ createdAt: -1 });
     // if (userData.length === 0) return res.status(400).send({ status: false, message: "No user found" });
     if (!userData)

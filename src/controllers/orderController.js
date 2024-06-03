@@ -99,18 +99,21 @@ const getOrderData = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     let filter = { isDeleted: false };
-    const orderId = req.params.orderId;
-    if (!orderId)
-      return res
-        .status(400)
-        .send({ status: false, message: "No order id passed" });
-    filter._id = orderId;
+    const orderId = req.query.orderId;
+    if (orderId) filter._id = orderId;
 
-    if (!req?.query?.userId)
+    if (!req?.query?.email)
       return res
         .status(400)
-        .send({ status: false, message: "user id is missing" });
-    filter.user = userId;
+        .send({ status: false, message: "email is missing" });
+
+    filter.email = req?.query?.email;
+    // if (!req?.query?.userId)
+    //   return res
+    //     .status(400)
+    //     .send({ status: false, message: "user id is missing" });
+
+    // filter.user = req?.query?.userId;
 
     const orderData = await OrderModel.find(filter).sort({ createdAt: -1 });
     if (orderData.length === 0)
@@ -130,7 +133,7 @@ const listOrderData = async (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit) : 1000;
 
     const orderData = await OrderModel.find({ isDeleted: false })
-      .populate("product user")
+      // .populate("product user")
       .limit(limit)
       .sort({ createdAt: -1 });
 

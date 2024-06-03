@@ -36,6 +36,7 @@ import {
 
 import {
   addEditProductReview,
+  getProductReview,
   listProductReview
 }from "../controllers/productReviewController.js";
 
@@ -75,15 +76,16 @@ router.put("/deleteProductData/:productId", authentication, authorization, delet
 
 router.post("/createOrder", authentication, createOrder);
 router.post("/placeOrder", placeOrder); // alreday tested before
-router.get("/getOrderData/:orderId/", authentication, getOrderData);
-router.get("/listOrderData", authentication, listOrderData);
+router.get("/getOrderData/", authentication, getOrderData);
+router.get("/listOrderData", listOrderData);
 router.put("/updateOrderData/:orderId", authentication, authorization, updateOrderData);
 router.delete("/deleteOrderData/:orderId", authentication, authorization, deleteOrderData);
 router.put("/updateSuccessOrderData/:orderId/:paymentId", updateSuccessOrderData);
 
 
 router.post("/addEditProductReview", addEditProductReview)
-router.post("/listProductReview", listProductReview)
+router.get("/listProductReview", listProductReview)
+router.get("/getProductReview", getProductReview);
 
 
 //shiprocket routes
