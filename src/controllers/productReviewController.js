@@ -3,10 +3,16 @@ import productReviewModel from "../models/productReviewModel.js";
 export const addEditProductReview = async (req, res) => {
     try {
         let data = req.body
-        let userPhone = data.userPhone
-        if(!data || !userPhone) return res.status(400).send({ status: false, message: "required data is missing" });
+        let userEmail = data.userEmail;
+        if (!data || !userEmail)
+          return res
+            .status(400)
+            .send({ status: false, message: "required data is missing" });
 
-        let review  = await productReviewModel.find({isDeleted: false, userPhone: userPhone})
+        let review = await productReviewModel.find({
+          isDeleted: false,
+          userEmail: userEmail,
+        });
         if(review){
             review.rating = data.rating
             review.comment = data.comment
