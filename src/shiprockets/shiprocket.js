@@ -429,7 +429,7 @@ export const createForwardShipmentShiprocketOrder = async (req, res) => {
       breadth: 1,
       height: 1,
       weight: order.weight,
-      pickup_location: "HomeNew", // name of location in shiprocket account
+      pickup_location: "Arzen Pickup", // name of location in shiprocket account
       // this is the address where the shipment will be picked up
       vendor_details: {
         email: "feedback@nuform.in",
@@ -442,7 +442,7 @@ export const createForwardShipmentShiprocketOrder = async (req, res) => {
         state: "Telangana",
         country: "india",
         pin_code: "500081",
-        pickup_location: "HomeNew",
+        pickup_location: "Arzen Pickup",
       },
     };
 
