@@ -423,7 +423,7 @@ export const createForwardShipmentShiprocketOrder = async (req, res) => {
           selling_price: product.selling_price,
         };
       }),
-       payment_method: "Prepaid",
+      payment_method: "Prepaid",
       sub_total: order.totalPrice,
       length: 1,
       breadth: 1,
@@ -435,12 +435,13 @@ export const createForwardShipmentShiprocketOrder = async (req, res) => {
         email: "feedback@nuform.in",
         phone: 7671051443,
         name: "Nuform",
-        address: "B-1001, Jal Vayu Towers, Khairatabad Circle No 17",
+        address:
+          "Flat no 507, Aditya Heights, Venkat Enclave, White fields, Kondapur,",
         address_2: "",
         city: "Hyderabad",
         state: "Telangana",
         country: "india",
-        pin_code: "500080",
+        pin_code: "500081",
         pickup_location: "HomeNew",
       },
     };
