@@ -33,6 +33,18 @@ const addUserData = async (req, res) => {
           .send({ status: false, message: "Email already exists" });
     }
 
+    if (!data?.phone)
+      return res
+        .status(400)
+        .send({ status: false, message: "phone is missing" });
+    else {
+      const phoneExist = await UserModel.findOne({ phone: data.phone });
+      if (phoneExist)
+        return res
+          .status(400)
+          .send({ status: false, message: "Phone number already exists" });
+    }
+
     const encryptPass = await bcrypt.hash(data.password, 10);
     data.password = encryptPass;
 
