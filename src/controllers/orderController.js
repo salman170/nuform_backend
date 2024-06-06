@@ -164,18 +164,18 @@ const updateSuccessOrderData = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     const orderId = req.params.orderId;
-    const paymentId = req.params.orderId;
+    const paymentId = req.params.paymentId;
 
-    // const updatePayment = await paymentModel.findByIdAndUpdate(
-    //   paymentId,
-    //   { paymentResult: "SUCCESS" },
-    //   { new: true }
-    // );
-    // if (!updatePayment) {
-    //   return res
-    //     .status(404)
-    //     .send({ status: false, message: "Payment details not found" });
-    // }
+    const updatePayment = await paymentModel.findByIdAndUpdate(
+      paymentId,
+      { paymentResult: "SUCCESS" },
+      { new: true }
+    );
+    if (!updatePayment) {
+      return res
+        .status(404)
+        .send({ status: false, message: "Payment details not found" });
+    }
     const updatedOrder = await OrderModel.findByIdAndUpdate(orderId, { paymentResult: "SUCCESS" }, { new: true });
     if (!updatedOrder) {
       return res.status(404).send({ status: false, message: "Order not found" });
