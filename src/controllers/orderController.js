@@ -41,49 +41,54 @@ const placeOrder = async (req, res) => {
       receipt: orderId,
     };
 
-    razorpayInstance.orders.create(paymentData, async (err, order) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).send({ status: false, message: err });
-      }
-      let paymentData = {
-        user: saveData.user,
-        order: orderId,
-        paymentMethod: "Razorpay",
-        paymentResult: "PENDING",
-        razorpayPaymentId: order.id,
-        razorpayReceipt: order.receipt,
-        amount: order.amount / 100,
-        status: order.status,
-        paymentDetails: order,
-      };
-
-      let savePaymentData = await paymentModel.create(paymentData);
-
-      // now update required details in order model
-      saveData.paymentId = savePaymentData._id;
-      saveData.isPaid = true;
-      saveData.paidAt = new Date();
-      saveData.paymentResult = "PENDING";
-      saveData.paymentMethod = "Razorpay";
-      saveData.transactionId = order.id;
-      saveData.paymentReceipt = order.receipt;
-      saveData.status = order.status;
-      saveData.updatedAt = new Date();
-      saveData.paymentDetails = order;
-      await saveData.save();
-
-      return res.status(200).send({
-        transactionId: saveData.transactionId,
-        total: saveData.paymentDetails.amount,
-        orderId: orderId,
-        paymentId: savePaymentData._id,
-        status: true,
+    const createRazorpayOrder = (paymentData) => {
+      return new Promise((resolve, reject) => {
+        razorpayInstance.orders.create(paymentData, (err, order) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve(order);
+        });
       });
+    };
+
+    const order = await createRazorpayOrder(paymentData);
+
+    let paymentDataRecord = {
+      user: saveData.user,
+      order: orderId,
+      paymentMethod: "Razorpay",
+      paymentResult: "PENDING",
+      razorpayPaymentId: order.id,
+      razorpayReceipt: order.receipt,
+      amount: order.amount / 100,
+      status: order.status,
+      paymentDetails: order,
+    };
+
+    let savePaymentData = await paymentModel.create(paymentDataRecord);
+
+    // Update required details in order model
+    saveData.paymentId = savePaymentData._id;
+    saveData.isPaid = true;
+    saveData.paidAt = new Date();
+    saveData.paymentResult = "PENDING";
+    saveData.paymentMethod = "Razorpay";
+    saveData.transactionId = order.id;
+    saveData.paymentReceipt = order.receipt;
+    saveData.status = order.status;
+    saveData.updatedAt = new Date();
+    saveData.paymentDetails = order;
+    await saveData.save();
+
+    return res.status(200).send({
+      transactionId: saveData.transactionId,
+      total: saveData.paymentDetails.amount,
+      orderId: orderId,
+      paymentId: savePaymentData._id,
+      status: true,
     });
 
-    // res.status(201).send({ status: true, data: saveData });
-    console.log("saveData", saveData);
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
