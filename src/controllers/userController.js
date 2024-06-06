@@ -21,6 +21,18 @@ const addUserData = async (req, res) => {
 
     if (!data?.password) data.password = data.phone;
 
+    if (!data?.email)
+      return res
+        .status(400)
+        .send({ status: false, message: "email is missing" });
+    else {
+      const emailExist = await UserModel.findOne({ email: data.email });
+      if (emailExist)
+        return res
+          .status(400)
+          .send({ status: false, message: "Email already exists" });
+    }
+
     const encryptPass = await bcrypt.hash(data.password, 10);
     data.password = encryptPass;
 
