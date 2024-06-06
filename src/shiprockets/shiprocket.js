@@ -36,6 +36,7 @@ export const fetchRates = async (req, res) => {
     if (!shiprocket_token) return res.status(401).send({ status: false, message: "Token is missing" });
 
     const { pickup_postcode, delivery_postcode, weight, cod } = req.body;
+    if(!weight) weight = 0.5;
 
     if (!pickup_postcode || !delivery_postcode || !weight) return res.status(400).send({ status: false, message: "Invalid request" });
 
