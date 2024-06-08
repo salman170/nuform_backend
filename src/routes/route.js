@@ -53,7 +53,8 @@ router.get("/test-me", function (req, res) {
 });
 
 router.post('/login', login) // tested
-router.post('/resetPassword', forgotPassword, resetPassword)
+router.post('/forgotPassword', forgotPassword)
+router.post('/resetPassword', resetPassword)
 
 router.post("/addUserData", addUserData) // tested
 router.get("/getUserData/:userId", authentication, getUserData) // tested

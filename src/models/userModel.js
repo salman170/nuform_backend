@@ -95,6 +95,9 @@ const userSchema = {
   passwordResetTokenExpires: {
     type: Date,
   },
+  resetToken: {
+    type: String,
+  },
   emailMe: {
     type: Boolean,
     default: true,
