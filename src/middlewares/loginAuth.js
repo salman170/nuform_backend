@@ -61,18 +61,39 @@ const forgotPassword = async (req, res) => {
 
     await UserModel.updateOne({ email: email }, { resetToken: resetToken });
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASS,
-      },
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.MAILTRAP_USER,
+    //     pass: process.env.MAILTRAP_PASS,
+    //   },
+    // });
+     const transporter = nodemailer.createTransport({
+       host: "smtp.gmail.com",
+       port: 465,
+       secure: true,
+       service: "gmail",
+       auth: {
+         user: process.env.GMAIL_USER,
+         pass: process.env.GMAIL_PASS,
+       },
+     });
+
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error("Error connecting to email server:", error);
+    return res.status(500).send({
+      status: false,
+      message: "Failed to connect to email server",
     });
+  }
+  console.log("Server is ready to send emails");
+});
 
     const mailOptions = {
-      from: process.env.MAILTRAP_USER,
+      from: `Nuform <${process.env.GMAIL_USER}>`,
       to: user.email,
-      subject: "Password Reset Request",
+      subject: "Password Reset Request - Nuform",
       html: `<p>Hello,</p><p>You requested a password reset. Your Token is ${resetToken}. Token will expire in 1 hour. Click <a href="reset domain page">here</a> to reset your password.</p>`,
     };
 
