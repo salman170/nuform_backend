@@ -84,13 +84,7 @@ const forgotPassword = async (req, res) => {
 
     await UserModel.updateOne({ email: email }, { resetToken: resetToken });
 
-    // const transporter = nodemailer.createTransport({
-    //   service: "gmail",
-    //   auth: {
-    //     user: process.env.MAILTRAP_USER,
-    //     pass: process.env.MAILTRAP_PASS,
-    //   },
-    // });
+  
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
