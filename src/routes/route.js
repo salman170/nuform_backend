@@ -90,9 +90,9 @@ router.get("/getProductReview", getProductReview);
 
 
 //shiprocket routes
-router.post("/fetchRates", shiprocketAuthenticate, fetchRates); //tested
-router.post("/optimizedRates", optimizedRates); //tested 
-router.post("/createShipment", createForwardShipmentShiprocketOrder);
+router.post("/fetchRates", shiprocketAuthenticate, fetchRates); // tested
+router.post("/optimizedRates", optimizedRates); // tested 
+router.post("/createShipment", createForwardShipmentShiprocketOrder); // tested
 router.get("/trackShipment/:awb", trackShiprocketOrder);
 
 

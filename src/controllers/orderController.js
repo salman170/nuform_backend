@@ -84,6 +84,9 @@ const placeOrder = async (req, res) => {
     return res.status(200).send({
       transactionId: saveData.transactionId,
       total: saveData.paymentDetails.amount,
+      email: saveData.email,
+      name: saveData.name,
+      contact: saveData.phone,
       orderId: orderId,
       paymentId: savePaymentData._id,
       status: true,

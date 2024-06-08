@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import OrderModel from "../models/orderModel.js";
 dotenv.config();
 import moment from "moment";
+import paymentModel from "../models/paymentModel.js";
 
 export const shiprocketAuthenticate = async (req, res, next) => {
   try {
@@ -384,10 +385,25 @@ export const createForwardShipmentShiprocketOrder = async (req, res) => {
     if(Object.keys(req.body).length === 0) return res.status(400).send({ status: false, message: "Invalid request" });
 
     const order_id = req.body.order_id;
+    const paymentId_id = req.body.paymentId_id;
+  
+    if (!order_id || !paymentId_id) return res.status(400).send({ status: false, message: "Invalid request" });
 
-    if (!order_id) return res.status(400).send({ status: false, message: "Invalid request" });
+     const updatePayment = await paymentModel.findByIdAndUpdate(
+       paymentId_id,
+       { paymentResult: "SUCCESS" },
+       { new: true }
+     );
+     if (!updatePayment) {
+       return res.status(404).send({ status: false, message: "Payment details not found" });
+     }
 
-    let order = await OrderModel.findById(order_id);
+
+    let order = await OrderModel.findByIdAndUpdate(
+      order_id,
+      { paymentResult: "SUCCESS" },
+      { new: true }
+    );
     order = order._doc;
     
 
