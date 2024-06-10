@@ -74,6 +74,7 @@ const forgotPassword = async (req, res) => {
     } else {
       user = await UserModel.findOne({ email: email });
     }
+
     if (!user)
       return res.status(400).send({ status: false, message: "User not found" });
 
@@ -124,10 +125,8 @@ const forgotPassword = async (req, res) => {
           // "       ",
 
           `We have received a request to reset your password. Please click the button below to reset your password. If you did not request a password reset, please ignore this email.`,
-
-          "     ",
-          `If you're having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:`,
-          `https://nuform.in/resetpassword/${user.email}/${resetToken}`,
+          `If you're having trouble clicking the "Reset Password" button, then <a href="https://nuform.in/resetpassword/${user.email}/${resetToken}">Click here</a> to reset your password.`,
+        
         ],
         //  outro: "To access further details, kindly proceed to log in to the portal.",
         action: {
