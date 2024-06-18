@@ -48,6 +48,8 @@ import {
   trackShiprocketOrder
 } from "../shiprockets/shiprocket.js";
 
+import { getInstagramFeed } from "../instagram/instagram.js";
+
 router.get("/test-me", function (req, res) {
   res.send("Hello World");
 });
@@ -94,6 +96,9 @@ router.post("/fetchRates", shiprocketAuthenticate, fetchRates); // tested
 router.post("/optimizedRates", optimizedRates); // tested 
 router.post("/createShipment", createForwardShipmentShiprocketOrder); // tested
 router.get("/trackShipment/:awb", trackShiprocketOrder);
+
+//instagram
+router.get("/api/instagramFeed", getInstagramFeed)
 
 
 router.all('/*', async function (req, res) {
