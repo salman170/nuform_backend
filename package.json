@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
+    "start": "node index.js",
     "build": "npm install ",
-    "dev": "npx nodemon src/index.js"
+    "dev": "npx nodemon index.js"
   },
   "author": "Asif",
   "license": "ISC",
