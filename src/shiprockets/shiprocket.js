@@ -74,6 +74,7 @@ export const optimizedRates = async (req, res) => {
 
     let available_courier_companies = rates.available_courier_companies || [];
 
+    available_courier_companies = available_courier_companies?.filter?.((courier) => !courier?.courier_name?.includes?.("India Post"))
 
     let cheapRatesInAscendingOrder = available_courier_companies.sort((a, b) => a.rate - b.rate);
 
