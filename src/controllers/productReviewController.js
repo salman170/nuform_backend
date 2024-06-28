@@ -17,6 +17,8 @@ export const addEditProductReview = async (req, res) => {
         if(review){
             review.rating = data.rating
             review.comment = data.comment
+            review.title = data.title
+            review.name = data.name
             review.updatedAt = new Date();
             await review.save()
             return res.status(200).send({ status: true, message: review });

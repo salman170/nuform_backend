@@ -9,7 +9,10 @@ const createOrder = async (req, res) => {
   try {
     let data = req.body;
 
-    if (!data) return res.status(400).send({ status: false, message: "order data is missing" });
+    if (!data)
+      return res
+        .status(400)
+        .send({ status: false, message: "order data is missing" });
 
     let saveData = await OrderModel.create(data);
     res.status(201).send({ status: true, data: saveData });
@@ -24,7 +27,18 @@ const placeOrder = async (req, res) => {
     let data = req.body;
     console.log("data", data);
 
-    if (!data) return res.status(400).send({ status: false, message: "order data is missing" });
+    if (!data)
+      return res
+        .status(400)
+        .send({ status: false, message: "order data is missing" });
+
+    if (
+      data.weight === 0 ||
+      data.weight === null ||
+      data.weight === undefined
+    ) {
+      data.weight = 0.5;
+    }
 
     let saveData = await OrderModel.create(data);
     let orderId = saveData._id;
@@ -91,7 +105,6 @@ const placeOrder = async (req, res) => {
       paymentId: savePaymentData._id,
       status: true,
     });
-
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
@@ -104,7 +117,10 @@ const getOrderData = async (req, res) => {
     const orderId = req.query.orderId;
     if (orderId) filter._id = orderId;
 
-    if (!req?.query?.email) return res.status(400).send({ status: false, message: "email is missing" });
+    if (!req?.query?.email)
+      return res
+        .status(400)
+        .send({ status: false, message: "email is missing" });
 
     filter.email = req?.query?.email;
     // if (!req?.query?.userId)
@@ -118,7 +134,8 @@ const getOrderData = async (req, res) => {
       filter.paymentResult = req?.query?.paymentResult;
 
     const orderData = await OrderModel.find(filter).sort({ createdAt: -1 });
-    if (orderData.length === 0) return res.status(400).send({ status: false, message: "No order found" });
+    if (orderData.length === 0)
+      return res.status(400).send({ status: false, message: "No order found" });
     return res.status(200).send({
       status: true,
       data: orderData,
@@ -139,7 +156,9 @@ const listOrderData = async (req, res) => {
       .sort({ createdAt: -1 });
 
     if (!orderData) {
-      return res.status(404).send({ status: false, message: "No orders found" });
+      return res
+        .status(404)
+        .send({ status: false, message: "No orders found" });
     }
     return res.status(200).send({ status: true, data: orderData });
   } catch (error) {
@@ -153,9 +172,15 @@ const updateOrderData = async (req, res) => {
     const orderId = req.params.orderId;
     const updateFields = req.body;
 
-    const updatedOrder = await OrderModel.findByIdAndUpdate(orderId, updateFields, { new: true });
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      orderId,
+      updateFields,
+      { new: true }
+    );
     if (!updatedOrder) {
-      return res.status(404).send({ status: false, message: "Order not found" });
+      return res
+        .status(404)
+        .send({ status: false, message: "Order not found" });
     }
     return res.status(200).send({ status: true, data: updatedOrder });
   } catch (error) {
@@ -179,9 +204,15 @@ const updateSuccessOrderData = async (req, res) => {
         .status(404)
         .send({ status: false, message: "Payment details not found" });
     }
-    const updatedOrder = await OrderModel.findByIdAndUpdate(orderId, { paymentResult: "SUCCESS" }, { new: true });
+    const updatedOrder = await OrderModel.findByIdAndUpdate(
+      orderId,
+      { paymentResult: "SUCCESS" },
+      { new: true }
+    );
     if (!updatedOrder) {
-      return res.status(404).send({ status: false, message: "Order not found" });
+      return res
+        .status(404)
+        .send({ status: false, message: "Order not found" });
     }
 
     return res.status(200).send({ status: true, data: updatedOrder });
@@ -197,7 +228,9 @@ const deleteOrderData = async (req, res) => {
 
     const orderToUpdate = await OrderModel.findById(orderId);
     if (!orderToUpdate) {
-      return res.status(404).send({ status: false, message: "Order not found" });
+      return res
+        .status(404)
+        .send({ status: false, message: "Order not found" });
     }
 
     orderToUpdate.isDeleted = true;
@@ -210,4 +243,12 @@ const deleteOrderData = async (req, res) => {
   }
 };
 
-export { createOrder, placeOrder, getOrderData, listOrderData, updateOrderData, deleteOrderData, updateSuccessOrderData };
+export {
+  createOrder,
+  placeOrder,
+  getOrderData,
+  listOrderData,
+  updateOrderData,
+  deleteOrderData,
+  updateSuccessOrderData,
+};
