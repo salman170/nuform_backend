@@ -98,7 +98,7 @@ router.post("/createShipment", createForwardShipmentShiprocketOrder); // tested
 router.get("/trackShipment/:awb", trackShiprocketOrder);
 
 //instagram
-router.get("/api/instagramFeed", getInstagramFeed)
+router.get("/api/instagramFeed", getInstagramFeed)  //added new token on 1.07.24
 
 
 router.all('/*', async function (req, res) {
